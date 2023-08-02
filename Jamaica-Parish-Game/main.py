@@ -11,21 +11,21 @@ turtle.shape(image)
 # answers
 data_source = pd.read_csv("12_parishes.csv")
 parish_list = data_source.parish.to_list()
-
+guessed_parishes = []
 
 # check if parish exist
 def parish_guess(guess):
     if guess in parish_list:
-        right_answer(guess)
+        correct_answer(guess)
         return 1
     elif guess == '':
-        screen.exitonclick()  # closes if you press "cancel" or just entered nothing and "ok"
+        return -1
     else:
         return 0
 
 
 # Place name by parish if it exists
-def right_answer(answer):
+def correct_answer(answer):
     marker = turtle.Turtle()
     marker.hideturtle()
     marker.penup()
@@ -41,7 +41,19 @@ while score < 14:
         parish_name = screen.textinput("Guess a parish", "Name a Parish").title()
     else:
         parish_name = screen.textinput(f"{score}/14 parish", "Name a Parish").title()
-    score += parish_guess(parish_name)
+    guessed_parishes.append(parish_name)
+    if parish_guess(parish_name) >= 0:
+        score += parish_guess(parish_name)
+    else:
+        break
+
+learn_material = []
+for parish in parish_list:
+    if parish not in guessed_parishes:
+        learn_material.append(parish)
+study_df = pd.DataFrame(learn_material)
+study_df.to_csv("learning_material.csv",index=False)
 
 # close on click when done
 screen.exitonclick()
+
