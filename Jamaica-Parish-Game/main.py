@@ -18,7 +18,7 @@ def parish_guess(guess):
     if guess in parish_list:
         correct_answer(guess)
         return 1
-    elif guess == '':
+    elif guess == 'exit':
         return -1
     else:
         return 0
@@ -47,10 +47,11 @@ while score < 14:
     else:
         break
 
-learn_material = []
-for parish in parish_list:
-    if parish not in guessed_parishes:
-        learn_material.append(parish)
+# learn_material = []
+# for parish in parish_list:
+#     if parish not in guessed_parishes:
+#         learn_material.append(parish)
+learn_material = [parish for parish in parish_list if parish not in guessed_parishes]
 study_df = pd.DataFrame(learn_material)
 study_df.to_csv("learning_material.csv",index=False)
 
